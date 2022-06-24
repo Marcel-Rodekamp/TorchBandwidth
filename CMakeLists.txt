@@ -11,3 +11,5 @@ set_property(TARGET bandwidth_torch PROPERTY CXX_STANDARD 14)
 add_executable(bandwidth_cpp bandwidth_cpp.cpp)
 set_property(TARGET bandwidth_cpp PROPERTY CXX_STANDARD 14)
 
+add_executable(bandwidth_c bandwidth_cc.cc)
+set_property(TARGET bandwidth_c PROPERTY CXX_STANDARD 14)
