@@ -6,7 +6,7 @@
 
 #include<omp.h>
 
-void vec_add(const std::vector<double> & x, const std::vector<double> & y, std::vector<double> out){
+void vec_add(const std::vector<double> & x, const std::vector<double> & y, std::vector<double> & out){
     
     #pragma omp parallel for
     for(int i = 0; i < x.size(); ++i){
