@@ -6,14 +6,6 @@
 
 #include<omp.h>
 
-void vec_add(const std::vector<double> & x, const std::vector<double> & y, std::vector<double> & out){
-    #pragma omp parallel for
-    for(int i = 0; i < x.size(); ++i){
-        out[i] = x[i] + y[i];
-    }
-}
-
-/*
 void vec_add(const double * x, const double * y, double * out, std::size_t N){
     
     #pragma omp parallel for
@@ -21,7 +13,6 @@ void vec_add(const double * x, const double * y, double * out, std::size_t N){
         out[i] = x[i] + y[i];
     }
 }
-*/
 
 double mean(std::vector<double> v) {
     double res = 0;
@@ -76,8 +67,7 @@ int main(){
             std::cout << "Measure ID: " << i << "/" << N_meas << std::endl;
         }
         start = omp_get_wtime();
-        //vec_add(x.data(),y.data(),out.data(),N);
-        vec_add(x,y,out);
+        vec_add(x.data(),y.data(),out.data(),N);
         end = omp_get_wtime();
         
         timings[i] = end-start;
