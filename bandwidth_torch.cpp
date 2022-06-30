@@ -55,6 +55,7 @@ int main(){
     // Define the tensors
     torch::Tensor T1 = torch::randn(N,options);
     torch::Tensor T2 = torch::randn(N,options);
+    torch::Tensor T3 = torch::randn(N,options);
 
     double start,end;
 
@@ -64,7 +65,7 @@ int main(){
             std::cout << "Measure ID: " << i << "/" << N_meas << std::endl;
         }
         start = omp_get_wtime();
-        T1+T2;
+        T3 = T1+T2;
         end = omp_get_wtime();
 
         timings[i] = end-start;
