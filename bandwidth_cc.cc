@@ -41,7 +41,7 @@ double err(std::vector<double> v) {
 
 int main(){
     // Tensor size
-    const std::size_t N = std::pow(2,26);
+    const std::size_t N = std::pow(2,28);
 
     // Tensor memory  
     // 1 byte = 9.31×10-10 Gb
