@@ -13,16 +13,6 @@ void vec_add(const std::vector<double> & x, const std::vector<double> & y, std::
     }
 }
 
-/*
-void vec_add(const double * x, const double * y, double * out, std::size_t N){
-    
-    #pragma omp parallel for
-    for(std::size_t i = 0; i < N; ++i){
-        out[i] = x[i] + y[i];
-    }
-}
-*/
-
 double mean(std::vector<double> v) {
     double res = 0;
 
@@ -50,7 +40,7 @@ double err(std::vector<double> v) {
 
 int main(){
     // Tensor size
-    const std::size_t N = std::pow(2,28);
+    const std::size_t N = std::pow(2,29);
 
     // Tensor memory  
     // 1 byte = 9.31×10-10 Gb
@@ -59,9 +49,11 @@ int main(){
     // Statistical power
     const int N_meas = 100;
 
+    // Number of sweeps per measurement
+    const int N_sweep = 100;
+
     // store timing data in here
     std::vector<double> timings(N_meas);
-
 
     // Define the tensors
     std::vector<double> x(N);
@@ -72,15 +64,16 @@ int main(){
 
     // measure T1+T2 and store into Tout N_meas times
     for(int i = 0; i < N_meas; ++i){
-        if (i % 100 == 0){
+        if (i % 10 == 0){
             std::cout << "Measure ID: " << i << "/" << N_meas << std::endl;
         }
         start = omp_get_wtime();
-        //vec_add(x.data(),y.data(),out.data(),N);
-        vec_add(x,y,out);
+        for(int j = 0; j < N_sweep; j++){
+            vec_add(x,y,out);
+        }
         end = omp_get_wtime();
         
-        timings[i] = end-start;
+        timings[i] = (end-start)/N_sweep;
     }
 
     // compute and print statistics    

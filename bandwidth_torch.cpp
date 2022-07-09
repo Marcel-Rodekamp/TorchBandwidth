@@ -30,6 +30,7 @@ double err(std::vector<double> v) {
 }
 
 int main(){
+    torch::init_num_threads();
     const int num_threads = omp_get_max_threads();
     torch::set_num_threads(num_threads);
 
@@ -43,6 +44,9 @@ int main(){
     // Statistical power
     const int N_meas = 100;
 
+    // Number of sweeps per measurement
+    const int N_sweep = 100;
+    
     // store timing data in here
     std::vector<double> timings(N_meas);
 
@@ -53,22 +57,24 @@ int main(){
                         .dtype(torch::kFloat64); // double
 
     // Define the tensors
-    torch::Tensor T1 = torch::randn(N,options);
-    torch::Tensor T2 = torch::randn(N,options);
-    torch::Tensor T3 = torch::randn(N,options);
+    torch::Tensor T1 = torch::zeros(N,options);
+    torch::Tensor T2 = torch::zeros(N,options);
+    torch::Tensor T3 = torch::zeros(N,options);
 
     double start,end;
 
     // measure T1+T2 and store into Tout N_meas times
     for(int i = 0; i < N_meas; ++i){
-        if (i % 100 == 0){
+        if (i % 10 == 0){
             std::cout << "Measure ID: " << i << "/" << N_meas << std::endl;
         }
         start = omp_get_wtime();
-        T3 = T1+T2;
+        for(int j = 0; j < N_sweep; ++j){
+            T3 = T1+T2;
+        }
         end = omp_get_wtime();
 
-        timings[i] = end-start;
+        timings[i] = (end-start)/N_sweep;
     }
 
     // compute and print statistics    

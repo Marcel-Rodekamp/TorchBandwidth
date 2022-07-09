@@ -50,9 +50,11 @@ int main(){
     // Statistical power
     const int N_meas = 100;
 
+    // Number of sweeps per measurement
+    const int N_sweep = 100;
+
     // store timing data in here
     std::vector<double> timings(N_meas);
-
 
     // Define the tensors
     std::vector<double> x(N);
@@ -63,14 +65,16 @@ int main(){
 
     // measure T1+T2 and store into Tout N_meas times
     for(int i = 0; i < N_meas; ++i){
-        if (i % 100 == 0){
+        if (i % 10 == 0){
             std::cout << "Measure ID: " << i << "/" << N_meas << std::endl;
         }
         start = omp_get_wtime();
-        vec_add(x.data(),y.data(),out.data(),N);
+        for(int j = 0; j < N_sweep; ++j){
+            vec_add(x.data(),y.data(),out.data(),N);
+        }
         end = omp_get_wtime();
         
-        timings[i] = end-start;
+        timings[i] = (end-start)/N_sweep;
     }
 
     // compute and print statistics    
